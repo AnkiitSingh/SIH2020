@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-const { text } = require("body-parser");
 
 const DepartmentSchema = new mongoose.Schema(
     {
