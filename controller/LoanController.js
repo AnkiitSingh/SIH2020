@@ -224,13 +224,20 @@ exports.loanApproved = async (req, res) => {
             });
         }
         loan[0].Status = "Approved";
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-        today = mm + '/' + dd + '/' + yyyy;
-        loan[0].FormRegion = "Application approved on " + today;
-        await loan[0].save()
-        return res.json({ message: "Ngo form approved" })
+        var sanction = req.body.SanctionedAmount
+        loan[0].SanctionedAmount = sanction
+        if (sanction) {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            loan[0].FormRegion = "Application approved on " + today;
+            await loan[0].save()
+            return res.json({ message: "Ngo form approved" })
+        }
+        return res.json({
+            message: "Fill the Sanctioned Amount details"
+        })
     })
 }

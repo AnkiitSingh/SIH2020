@@ -76,8 +76,11 @@ const LoanSchema = new mongoose.Schema({
     SanctionedAmount: {
         type: Number,
         default: 0
+    },
+    PaidAmount: {
+        type: Number,
+        default: 0
     }
-
 }, { timestamps: true });
 
 module.exports = mongoose.model("LoanInfo", LoanSchema)

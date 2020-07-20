@@ -16,6 +16,7 @@ exports.newTransaction = async (req, res) => {
                 });
             }
             info[0].TransactionId.push(value._id);
+            info[0].PaidAmount = info[0].PaidAmount + value.amount;
             info[0].save();
             return res.json({
                 amount: value.amount,
