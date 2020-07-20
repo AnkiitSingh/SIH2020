@@ -114,8 +114,8 @@ exports.getAadhar = async (req, res) => {
         error: "Aadhar card not found",
       });
     }
-    res.set("Content-Type", photo[0].AadharPhoto.contentType);
-    return res.send(photo[0].AadharPhoto.data);
+    res.set("Content-Type", photo[0].BankPassbook.contentType);
+    return res.send(photo[0].BankPassbook.data);
   });
 }
 

@@ -32,12 +32,12 @@ app.use(cors());
 //Routes imported from router folder
 const NgoRoutes = require("./routes/NgoRouts")
 const DeptRoutes = require("./routes/OfficeRoutes")
-
+const LoanRoutes = require("./routes/LoanRoutes")
 //Mounting Routes in app.js
 
 app.use("/api", NgoRoutes);
 app.use("/api", DeptRoutes);
-
+app.use("/api", LoanRoutes)
 //Home Page
 app.get("/", async (req, res) => {
   res.send("We got the basic route working")
