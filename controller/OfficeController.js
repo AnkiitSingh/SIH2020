@@ -43,3 +43,10 @@ exports.deptLogin = (req, res) => {
         return res.json({ token, user: { _id, deptId, role } });
     });
 }
+
+exports.signOut = (req, res) => {
+    res.clearCookie("token");
+    res.json({
+        message: "User signout successfully"
+    });
+};

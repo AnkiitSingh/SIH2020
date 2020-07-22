@@ -151,6 +151,13 @@ exports.ngoLogin = async (req, res) => {
   })
 }
 
+exports.signOut = (req, res) => {
+  res.clearCookie("token");
+  res.json({
+    message: "User signout successfully"
+  });
+};
+
 exports.rejectedForm = async (req, res) => {
   const ngo = await Ngo.find({ _id: req.params.id }, async function (err, ngo) {
     if (err) {
