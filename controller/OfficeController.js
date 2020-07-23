@@ -40,7 +40,8 @@ exports.deptLogin = (req, res) => {
 
         //send response to front end
         const { _id, deptId, role } = user;
-        return res.json({ token, user: { _id, deptId, role } });
+        const email = deptId
+        return res.json({ token, user: { _id, email, role } });
     });
 }
 

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
     newNgo, getNgo, getAadhar, getCertificate, getAllNgo, rejectedForm, approveForm,
-    updateForm, updateLoginCred, ngoLogin, pendingNgo, signOut
+    updateForm, updateLoginCred, ngoLogin, pendingNgo
 } = require("../controller/NgoController")
 
 router.post("/newNgo", newNgo);
@@ -18,8 +18,6 @@ router.get("/getNgo/data/all", getAllNgo)
 router.get("/getNgo/status/pending", pendingNgo);
 
 router.post("/getNgo/ngoLogin", ngoLogin);
-
-router.get("/getNgo/signout", signOut);
 
 router.put("/getNgo/rejectedStatus/:id", rejectedForm);
 

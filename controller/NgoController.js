@@ -114,8 +114,8 @@ exports.getAadhar = async (req, res) => {
         error: "Aadhar card not found",
       });
     }
-    res.set("Content-Type", photo[0].BankPassbook.contentType);
-    return res.send(photo[0].BankPassbook.data);
+    res.set("Content-Type", photo[0].AadharPhoto.contentType);
+    return res.send(photo[0].AadharPhoto.data);
   });
 }
 
@@ -147,16 +147,10 @@ exports.ngoLogin = async (req, res) => {
     const token = jwt.sign({ _id: ngo._id }, process.env.SECRET);
     res.cookie("token", token, { expire: new Date() + 9999 });
     const { email, NgoId, NgoRegNo, role, _id } = ngo[0];
-    return res.json({ token, ngo: { _id, email, NgoId, NgoRegNo, role } });
+    return res.json({ token, user: { _id, email, NgoId, NgoRegNo, role } });
   })
 }
 
-exports.signOut = (req, res) => {
-  res.clearCookie("token");
-  res.json({
-    message: "User signout successfully"
-  });
-};
 
 exports.rejectedForm = async (req, res) => {
   const ngo = await Ngo.find({ _id: req.params.id }, async function (err, ngo) {
