@@ -5,6 +5,10 @@ const LoanSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    CandidateName: {
+        type: String,
+        required: true
+    },
     RequestedAmount: {
         type: Number,
         required: true
@@ -69,9 +73,18 @@ const LoanSchema = new mongoose.Schema({
         default: "Pending",
         enum: ["Rejected", "Pending", "Approved"]
     },
-    FormRegion: {
+    FormReason: {
         type: String,
         default: "In Pending State"
+    },
+    Repayment: {
+        type: String,
+        default: "Pending",
+        enum: ["Rejected", "Pending", "Approved", "Requested"]
+    },
+    RepaymentReason: {
+        type: String,
+        default: "Not yet requested"
     },
     SanctionedAmount: {
         type: Number,
@@ -80,6 +93,13 @@ const LoanSchema = new mongoose.Schema({
     PaidAmount: {
         type: Number,
         default: 0
+    },
+    CreditScore: {
+        type: String,
+        default: 0
+    },
+    InstallmentDetails: {
+        type: []
     }
 }, { timestamps: true });
 

@@ -15,11 +15,11 @@ exports.LoanForm = (req, res) => {
             });
         }
 
-        const { LoanMediator, RequestedAmount, LoanAccount, AccountIFSC, AccountName,
+        const { LoanMediator, RequestedAmount, LoanAccount, AccountIFSC, AccountName, CandidateName,
             IncomeLevel, EconomicActivity, Age, Saving, FamilyStrength, Caste, Religion, LiteracyLevel,
         } = fields;
 
-        if (!LoanMediator || !RequestedAmount || !LoanAccount || !AccountIFSC || !AccountName || !IncomeLevel ||
+        if (!LoanMediator || !RequestedAmount || !CandidateName || !LoanAccount || !AccountIFSC || !AccountName || !IncomeLevel ||
             !EconomicActivity || !Age || !Saving || !FamilyStrength || !Caste || !Religion || !LiteracyLevel) {
             return res.status(400).json({
                 error: "Please include all fields",
@@ -76,9 +76,10 @@ exports.updateForm = (req, res) => {
                     });
                 }
 
-                const { LoanMediator, RequestedAmount, LoanAccount, AccountIFSC, AccountName,
+                const { LoanMediator, RequestedAmount, LoanAccount, AccountIFSC, AccountName, Name,
                     IncomeLevel, EconomicActivity, Age, Saving, FamilyStrength, Caste, Religion, LiteracyLevel, } = fields;
                 data.LoanMediator = LoanMediator;
+                data.Name = Name
                 data.RequestedAmount = RequestedAmount;
                 data.LoanAccount = LoanAccount;
                 data.AccountIFSC = AccountIFSC;
@@ -170,6 +171,20 @@ exports.allLoan = async (req, res) => {
     })
 }
 
+exports.loanImo = async (req, res) => {
+    const loanInfo = await LoanInfo.find({ LoanMediator: req.params.imoId }, function (err, data) {
+        if (err) {
+            return res.status(404).json({
+                error: "Aadhar card not found",
+            });
+        }
+        for (let i = 0; i < data.length; i++) {
+            data[i].BankPassbook = undefined;
+            data[i].AadharPhoto = undefined;
+        }
+        return res.send(data);
+    })
+}
 exports.pendingLoan = async (req, res) => {
     const value = await LoanInfo.find({ Status: "Pending" }, async (err, data) => {
         if (err) {

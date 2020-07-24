@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { LoanForm, updateForm, getPassbook, getAadhar, allLoan, pendingLoan, loanDetails, loanReject, loanApproved } = require("../controller/LoanController");
+const { LoanForm, updateForm, getPassbook, getAadhar, allLoan, pendingLoan, loanDetails, loanReject, loanApproved, loanImo } = require("../controller/LoanController");
 
 router.post("/loanForm/form/:ImoId", LoanForm);
 
@@ -15,6 +15,8 @@ router.get("/loanForm/all", allLoan);
 router.get("/loanForm/pending", pendingLoan);
 
 router.get("/loanForm/info/:id", loanDetails);
+
+router.get("/loanForm/details/:imoId", loanImo)
 
 router.put("/loanForm/reject/:id", loanReject);
 
