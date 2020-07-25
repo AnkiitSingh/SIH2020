@@ -16,9 +16,9 @@ exports.newNgo = (req, res) => {
       });
     }
 
-    const { NgoId, NgoRegNo, NgoHead, NgoSector, email, password } = fields;
+    const { NgoId, NgoRegNo, NgoHead, NgoSector, email, password, name } = fields;
 
-    if (!NgoId || !NgoRegNo || !NgoHead || !NgoSector || !email || !password) {
+    if (!NgoId || !NgoRegNo || !NgoHead || !NgoSector || !email || !password || !name) {
       return res.status(400).json({
         error: "Please include all fields",
       });
@@ -151,7 +151,6 @@ exports.ngoLogin = async (req, res) => {
   })
 }
 
-
 exports.rejectedForm = async (req, res) => {
   const ngo = await Ngo.find({ _id: req.params.id }, async function (err, ngo) {
     if (err) {
@@ -206,14 +205,14 @@ exports.updateForm = async (req, res) => {
           });
         }
 
-        const { NgoId, NgoRegNo, NgoHead, NgoSector, email, password } = fields;
+        const { NgoId, NgoRegNo, NgoHead, NgoSector, email, password, name } = fields;
         data.NgoId = NgoId;
         data.NgoRegNo = NgoRegNo;
         data.NgoHead = NgoHead;
         data.NgoSector = NgoSector;
         data.email = email;
-        data.password = password
-
+        data.password = password;
+        data.name = name;
         //handle file here
         if (file.AadharPhoto) {
           if (file.AadharPhoto.size > 300000) {

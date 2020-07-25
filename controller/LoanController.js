@@ -185,8 +185,24 @@ exports.loanImo = async (req, res) => {
         return res.send(data);
     })
 }
+
 exports.pendingLoan = async (req, res) => {
     const value = await LoanInfo.find({ Status: "Pending" }, async (err, data) => {
+        if (err) {
+            return res.json({
+                message: "No Ngo found"
+            })
+        }
+        for (let i = 0; i < data.length; i++) {
+            data[i].BankPassbook = undefined;
+            data[i].AadharPhoto = undefined;
+        }
+        return await res.send(data)
+    })
+}
+
+exports.repaymentLoan = async (req, res) => {
+    const value = await LoanInfo.find({ Repayment: "Pending" }, async (err, data) => {
         if (err) {
             return res.json({
                 message: "No Ngo found"

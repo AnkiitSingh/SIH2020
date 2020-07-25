@@ -79,12 +79,11 @@ const LoanSchema = new mongoose.Schema({
     },
     Repayment: {
         type: String,
-        default: "Pending",
-        enum: ["Rejected", "Pending", "Approved", "Requested"]
+        default: "Not Requested",
+        enum: ["Rejected", "Pending", "Approved", "Requested", "Not Requested"]
     },
     RepaymentReason: {
-        type: String,
-        default: "Not yet requested"
+        type: String
     },
     SanctionedAmount: {
         type: Number,

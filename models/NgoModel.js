@@ -7,6 +7,10 @@ const NgoSchema = new mongoose.Schema(
             required: true,
             unique: true
         },
+        name: {
+            type: String,
+            required: true
+        },
         NgoRegNo: {
             type: String,
             required: true,
