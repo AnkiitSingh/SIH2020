@@ -9,6 +9,10 @@ const LoanSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    AccountName: {
+        type: String,
+        required: true
+    },
     RequestedAmount: {
         type: Number,
         required: true
@@ -18,10 +22,6 @@ const LoanSchema = new mongoose.Schema({
         required: true
     },
     AccountIFSC: {
-        type: String,
-        required: true
-    },
-    AccountName: {
         type: String,
         required: true
     },

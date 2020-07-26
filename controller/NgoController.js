@@ -53,7 +53,10 @@ exports.newNgo = (req, res) => {
           error: "Saving product in DB failed",
         });
       }
-      res.send("Ngo Registered Successfully")
+      res.status(201).json({
+        error: "",
+        success: "Data successfully saved"
+      });
     });
   });
 }
