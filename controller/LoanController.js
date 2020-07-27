@@ -54,7 +54,10 @@ exports.LoanForm = (req, res) => {
                     error: "Saving product in DB failed",
                 });
             }
-            res.send("Loan request Registered Successfully")
+            res.status(200).json({
+                error: "",
+                success: "Loan request Accepted"
+            });
         });
     });
 }
@@ -256,8 +259,12 @@ exports.loanApproved = async (req, res) => {
         }
         loan[0].Status = "Approved";
         var sanction = req.body.SanctionedAmount
-        loan[0].SanctionedAmount = sanction
-        if (sanction) {
+        loan[0].SanctionedAmount = sanction;
+        loan[0].DateofReturn = req.body.DateofReturn;
+        loan[0].CreditScore = req.body.CreditScore;
+        loan[0].LoanIntrest = req.body.LoanIntrest;
+        loan[0].InstallmentDetails = req.body.InstallmentDetails;
+        if (sanction && req.body.DateofReturn && req.body.CreditScore && req.body.LoanIntrest && req.body.InstallmentDetails) {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!

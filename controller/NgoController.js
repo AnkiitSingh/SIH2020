@@ -168,6 +168,7 @@ exports.rejectedForm = async (req, res) => {
       await ngo[0].save()
       return res.json({ message: "Ngo Form Rejected" })
     }
+    console.log("lol")
     return res.json({ error: "Please fill complete information" })
   });
 }
