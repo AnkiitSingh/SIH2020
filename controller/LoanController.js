@@ -240,9 +240,9 @@ exports.loanReject = async (req, res) => {
             });
         }
         data[0].Status = "Rejected";
-        let recieve = req.body.FormRegion;
+        let recieve = req.body.FormReason;
         if (recieve) {
-            data[0].FormRegion = recieve;
+            data[0].FormReason = recieve;
             await data[0].save()
             return res.json({ message: "Loan request Rejected" })
         }
@@ -270,12 +270,27 @@ exports.loanApproved = async (req, res) => {
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             var yyyy = today.getFullYear();
             today = mm + '/' + dd + '/' + yyyy;
-            loan[0].FormRegion = "Application approved on " + today;
+            loan[0].FormReason = "Application approved on " + today;
             await loan[0].save()
             return res.json({ message: "Ngo form approved" })
         }
         return res.json({
             message: "Fill the Sanctioned Amount details"
         })
+    })
+}
+
+exports.approvedLoan = async (req, res) => {
+    const value = await LoanInfo.find({ Status: "Approved" }, async (err, data) => {
+        if (err) {
+            return res.json({
+                message: "No Ngo found"
+            })
+        }
+        for (let i = 0; i < data.length; i++) {
+            data[i].BankPassbook = undefined;
+            data[i].AadharPhoto = undefined;
+        }
+        return await res.send(data)
     })
 }
