@@ -1,4 +1,5 @@
 const LoanInfo = require("../models/LoanModel");
+const Transaction = require("../models/TransactionModel");
 const formidable = require("formidable");
 const fs = require("fs");
 var jwt = require("jsonwebtoken");
@@ -264,7 +265,8 @@ exports.loanApproved = async (req, res) => {
         loan[0].CreditScore = req.body.CreditScore;
         loan[0].LoanIntrest = req.body.LoanIntrest;
         loan[0].InstallmentDetails = req.body.InstallmentDetails;
-        if (sanction && req.body.DateofReturn && req.body.CreditScore && req.body.LoanIntrest && req.body.InstallmentDetails) {
+        loan[0].PayableInstallment = req.body.PayableInstallment;
+        if (sanction && req.body.DateofReturn && req.body.CreditScore && req.body.LoanIntrest && req.body.InstallmentDetails && req.body.PayableInstallment) {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -292,5 +294,104 @@ exports.approvedLoan = async (req, res) => {
             data[i].AadharPhoto = undefined;
         }
         return await res.send(data)
+    })
+}
+
+exports.loanPaid = async (req, res) => {
+    const loanDta = await LoanInfo.find({ _id: req.params.id }, async function (err, loan) {
+        if (err) {
+            return res.status(404).json({
+                error: "Details not found",
+            });
+        }
+        loan[0].Status = "Paid";
+        loan[0].Repayment = "Not Requested"
+        var paidamt = req.body.PaidAmount;
+        var TranId = req.body.TranId;
+        if (paidamt && TranId) {
+            loan[0].PaidAmount = loan[0].PaidAmount + paidamt;
+            loan[0].TransactionId.push(TranId);
+            var id = loan[0]._id;
+            const data = new Transaction();
+            data.transactionTo = id;
+            data.transactionId = TranId;
+            data.amount = paidamt;
+            data.save((err, value) => {
+                if (err) {
+                    return res.status(500).json({
+                        error: "Please Include All Fields",
+                    });
+                }
+            })
+            await loan[0].save()
+            return res.json({ message: "Transaction Process complete" })
+        }
+        return res.json({
+            message: "Fill all the required details"
+        })
+    })
+}
+
+exports.loanRepay = async (req, res) => {
+    LoanInfo.find({ _id: req.params.id }, async function (err, loan) {
+        if (err) {
+            return res.json({ "error": "No data found" })
+        }
+        else {
+            loan[0].Status = "Approved";
+            loan[0].RepaymentReason = "Loan Requeted Approved";
+            var payableAmt = req.body.payableAmt;
+            if (payableAmt) {
+                loan[0].PayableInstallment = payableAmt;
+                await loan[0].save();
+                res.json({ "message": "Laon Repayment req. accepted" });
+            }
+            res.json({ "error": "fill complete information" })
+        }
+    })
+}
+
+exports.loanRejRepay = async (req, res) => {
+    const data = LoanInfo.find({ _id: req.params.id }, async function (err, loan) {
+        if (err) {
+            return res.json({ "error": "No data found" })
+        }
+        else {
+            loan[0].Repayment = "Rejected";
+            loan[0].Status = "Paper Verified"
+            var reason = req.body.RepaymentReason;
+            if (reason) {
+                loan[0].RepaymentReason = reason;
+                await loan[0].save();
+                res.json({ "message": "Laon Repayment req. rejected" });
+            }
+            res.json({ "error": "fill complete information" })
+        }
+    })
+}
+
+exports.reqRepay = async (req, res) => {
+    LoanInfo.find({ _id: req.params.id }, async function (err, loan) {
+        if (err) {
+            return res.json({ "error": "No data found" })
+        }
+        else {
+            loan[0].Repayment = "Requested";
+            await loan[0].save();
+            res.json({ "message": "Laon Repayment req. done" });
+        }
+    })
+}
+
+exports.cancleReq = async (req, res) => {
+    LoanInfo.find({ _id: req.params.id }, async function (err, loan) {
+        if (err) {
+            return res.json({ "error": "No data found" })
+        }
+        else {
+            loan[0].Status = "Request Cancelled";
+            await loan[0].save();
+            res.json({ "message": "Laon Repayment cancelled" });
+        }
     })
 }

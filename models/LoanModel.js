@@ -74,7 +74,7 @@ const LoanSchema = new mongoose.Schema({
     Status: {
         type: String,
         default: "Pending",
-        enum: ["Rejected", "Pending", "Approved", "Paid"]
+        enum: ["Rejected", "Pending", "Approved", "Paid", "Paper Verified", "Request Cancelled"]
     },
     FormReason: {
         type: String,
@@ -86,7 +86,8 @@ const LoanSchema = new mongoose.Schema({
         enum: ["Rejected", "Pending", "Approved", "Requested", "Not Requested"]
     },
     RepaymentReason: {
-        type: String
+        type: String,
+        default: ""
     },
     SanctionedAmount: {
         type: Number,
@@ -107,6 +108,10 @@ const LoanSchema = new mongoose.Schema({
     InstallmentDetails: {
         type: []
     },
+    PayableInstallment: {
+        type: Number,
+        default: 0
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model("LoanInfo", LoanSchema)
