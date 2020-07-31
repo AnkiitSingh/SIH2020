@@ -206,7 +206,7 @@ exports.pendingLoan = async (req, res) => {
 }
 
 exports.repaymentLoan = async (req, res) => {
-    const value = await LoanInfo.find({ Repayment: "Pending" }, async (err, data) => {
+    const value = await LoanInfo.find({ Repayment: "Requested" }, async (err, data) => {
         if (err) {
             return res.json({
                 message: "No Ngo found"
@@ -306,7 +306,7 @@ exports.loanPaid = async (req, res) => {
         }
         loan[0].Status = "Paid";
         loan[0].Repayment = "Not Requested"
-        var paidamt = req.body.PaidAmount;
+        var paidamt = parseInt(req.body.PaidAmount);
         var TranId = req.body.TranId;
         if (paidamt && TranId) {
             loan[0].PaidAmount = loan[0].PaidAmount + paidamt;
