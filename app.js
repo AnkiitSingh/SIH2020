@@ -7,7 +7,7 @@ const mongoose = require("mongoose"),
   cookieParser = require("cookie-parser"),
   cors = require("cors");
 
-const path = require('path')
+const path = require('path');
 
 //DB Connection
 mongoose
@@ -47,7 +47,7 @@ app.get("/", async (req, res) => {
 
 app.use(express.static('client/build'));
 app.get('*', (req, res) => {
-  res.sendFile(path.json(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 })
 //PORT
 const port = process.env.PORT || 8000;
