@@ -222,7 +222,7 @@ exports.repaymentLoan = async (req, res) => {
 
 exports.loanDetails = async (req, res) => {
     const value = await LoanInfo.findById({ _id: req.params.id }, async (err, data) => {
-        if (err) {
+        if (err || !data) {
             return res.json({
                 message: "No data found"
             })
