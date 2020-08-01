@@ -192,6 +192,20 @@ exports.approveForm = async (req, res) => {
   })
 }
 
+exports.blackList = async (req, res) => {
+  const certificate = await Ngo.find({ _id: req.params.id }, async function (err, ngo) {
+    if (err) {
+      return res.status(404).json({
+        error: "Ngo details not found",
+      });
+    }
+    ngo[0].Status = "Rejected";
+    ngo[0].formReason = "Blacklisted";
+    await ngo[0].save()
+    return res.json({ message: "Ngo form blacklisted" })
+  })
+}
+
 exports.updateForm = async (req, res) => {
   Ngo.findById(req.params.id, function (err, data) {
     if (!data) {
