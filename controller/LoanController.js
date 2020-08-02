@@ -59,13 +59,13 @@ exports.LoanForm = (req, res) => {
             newLoan.BankPassbook.contentType = file.BankPassbook.type;
         }
         //save to the DB
-        newLoan.save((err, NGO) => {
+        newLoan.save(async (err, NGO) => {
             if (err) {
                 res.status(400).json({
                     error: "Saving product in DB failed",
                 });
             }
-            client.messages.create({
+            await client.messages.create({
                 body: "Your loan request has been successfully submited to the MWCD (Govt. of India)",
                 to: "+91" + NGO.phoneNo,
                 from: myNo

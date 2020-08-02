@@ -16,7 +16,7 @@ const client = require('twilio')(accountSid, authToken, {
 
 const myNo = +12056193915
 
-exports.newNgo = (req, res) => {
+exports.newNgo = async (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
 
@@ -64,12 +64,17 @@ exports.newNgo = (req, res) => {
           error: "Saving product in DB failed",
         });
       }
-      await client.messages.create({
-        body: "Your Form has been successfully submited to MWCD (Govt. of India)",
-        to: "+91" + NGO.phoneNo,
-        from: myNo
-      })
-      res.status(201).json({
+      try {
+        await client.messages.create({
+          body: "Your Form has been successfully submited to MWCD (Govt. of India)",
+          to: "+91" + NGO.phoneNo,
+          from: myNo
+        })
+      }
+      catch (err) {
+        // your catch block code goes here
+      }
+      return res.status(201).json({
         error: "",
         success: "Data successfully saved"
       });

@@ -115,6 +115,17 @@ const LoanSchema = new mongoose.Schema({
     PayableInstallment: {
         type: Number,
         default: 0
+    },
+    RepayedAmt: {
+        type: Number,
+        default: 0
+    },
+    RepayableId: {
+        type: []
+    },
+    RepayableAmount: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 

@@ -34,12 +34,15 @@ const NgoRoutes = require("./routes/NgoRouts")
 const DeptRoutes = require("./routes/OfficeRoutes")
 const LoanRoutes = require("./routes/LoanRoutes")
 const TransactionRoutes = require("./routes/TransactionRoute")
+const ReapymentRoutes = require("./routes/RepaymentRoutes")
 //Mounting Routes in app.js
 
 app.use("/api", NgoRoutes);
 app.use("/api", DeptRoutes);
 app.use("/api", LoanRoutes);
-app.use("/api", TransactionRoutes)
+app.use("/api", TransactionRoutes);
+app.use("/api", ReapymentRoutes);
+
 //Home Page
 app.get("/", async (req, res) => {
   res.send("We got the basic route working")
