@@ -4,6 +4,16 @@ const formidable = require("formidable");
 const fs = require("fs");
 var jwt = require("jsonwebtoken");
 var expressJwt = require("express-jwt");
+const twilio = require("twilio");
+require("dotenv").config();
+
+var accountSid = process.env.TWILIO_ACCOUNT_SID; // Your Account SID from www.twilio.com/console
+var authToken = process.env.TWILIO_AUTH_TOKEN;
+
+const client = require('twilio')(accountSid, authToken, {
+    lazyLoading: true
+});
+const myNo = +12056193915
 
 exports.LoanForm = (req, res) => {
     let form = new formidable.IncomingForm();
@@ -17,11 +27,11 @@ exports.LoanForm = (req, res) => {
         }
 
         const { LoanMediator, RequestedAmount, LoanAccount, AccountIFSC, AccountName, CandidateName,
-            IncomeLevel, EconomicActivity, Age, Saving, FamilyStrength, Caste, Religion, LiteracyLevel,
+            IncomeLevel, EconomicActivity, Age, Saving, FamilyStrength, Caste, Religion, LiteracyLevel, phoneNo
         } = fields;
 
         if (!LoanMediator || !RequestedAmount || !CandidateName || !LoanAccount || !AccountIFSC || !AccountName || !IncomeLevel ||
-            !EconomicActivity || !Age || !Saving || !FamilyStrength || !Caste || !Religion || !LiteracyLevel) {
+            !EconomicActivity || !Age || !Saving || !FamilyStrength || !Caste || !Religion || !LiteracyLevel || !phoneNo) {
             return res.status(400).json({
                 error: "Please include all fields",
             });
@@ -55,6 +65,11 @@ exports.LoanForm = (req, res) => {
                     error: "Saving product in DB failed",
                 });
             }
+            client.messages.create({
+                body: "Your loan request has been successfully submited to the MWCD (Govt. of India)",
+                to: "+91" + NGO.phoneNo,
+                from: myNo
+            })
             res.status(200).json({
                 error: "",
                 success: "Loan request Accepted"

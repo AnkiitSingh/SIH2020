@@ -68,6 +68,10 @@ const LoanSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    phoneNo: {
+        type: Number,
+        required: true,
+    },
     DateofReturn: {
         type: String
     },
