@@ -3,7 +3,18 @@ const formidable = require("formidable");
 const fs = require("fs");
 var jwt = require("jsonwebtoken");
 var expressJwt = require("express-jwt");
+const fast2sms = require('fast-two-sms');
+const twilio = require("twilio");
+require("dotenv").config();
 
+var accountSid = process.env.TWILIO_ACCOUNT_SID; // Your Account SID from www.twilio.com/console
+var authToken = process.env.TWILIO_AUTH_TOKEN;
+
+const client = require('twilio')(accountSid, authToken, {
+  lazyLoading: true
+});
+
+const myNo = +12056193915
 
 exports.newNgo = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -16,9 +27,9 @@ exports.newNgo = (req, res) => {
       });
     }
 
-    const { NgoId, NgoRegNo, NgoHead, NgoSector, email, password, name } = fields;
+    const { NgoId, NgoRegNo, NgoHead, NgoSector, email, password, name, phoneNo } = fields;
 
-    if (!NgoId || !NgoRegNo || !NgoHead || !NgoSector || !email || !password || !name) {
+    if (!NgoId || !NgoRegNo || !NgoHead || !NgoSector || !email || !password || !name || !phoneNo) {
       return res.status(400).json({
         error: "Please include all fields",
       });
@@ -47,12 +58,17 @@ exports.newNgo = (req, res) => {
     }
 
     //save to the DB
-    newNGO.save((err, NGO) => {
+    newNGO.save(async (err, NGO) => {
       if (err) {
         res.status(400).json({
           error: "Saving product in DB failed",
         });
       }
+      client.messages.create({
+        body: "Your Form has been successfully submited",
+        to: "+91" + NGO.phoneNo,
+        from: myNo
+      })
       res.status(201).json({
         error: "",
         success: "Data successfully saved"

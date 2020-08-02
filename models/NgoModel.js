@@ -36,6 +36,10 @@ const NgoSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        phoneNo: {
+            type: Number,
+            required: true
+        },
         Status: {
             type: String,
             default: "Pending",

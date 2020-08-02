@@ -17,8 +17,10 @@
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-validator": "^6.6.0",
+    "fast-two-sms": "^2.1.0",
     "formidable": "^1.2.2",
     "mongoose": "^5.9.16",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "twilio": "^3.48.1"
   }
 }
