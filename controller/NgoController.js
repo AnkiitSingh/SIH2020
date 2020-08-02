@@ -64,7 +64,7 @@ exports.newNgo = (req, res) => {
           error: "Saving product in DB failed",
         });
       }
-      client.messages.create({
+      await client.messages.create({
         body: "Your Form has been successfully submited",
         to: "+91" + NGO.phoneNo,
         from: myNo
