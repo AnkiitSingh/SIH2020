@@ -181,8 +181,14 @@ exports.rejectedForm = async (req, res) => {
     let recieve = req.body.formReason;
     if (recieve) {
       ngo[0].formReason = recieve;
+      await client.messages.create({
+        body: "Your Form request has been rejected by the MWCD (Govt. of India). Login to see more details",
+        to: "+91" + ngo[0].phoneNo,
+        from: myNo
+      })
       await ngo[0].save()
       return res.json({ message: "Ngo Form Rejected" })
+
     }
     console.log("lol")
     return res.json({ error: "Please fill complete information" })
@@ -203,7 +209,12 @@ exports.approveForm = async (req, res) => {
     var yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy;
     ngo[0].formReason = "Application approved on " + today;
-    await ngo[0].save()
+    await ngo[0].save();
+    await client.messages.create({
+      body: "Your Form request has been approved by the MWCD (Govt. of India). Now you can fill loan forms",
+      to: "+91" + ngo[0].phoneNo,
+      from: myNo
+    })
     return res.json({ message: "Ngo form approved" })
   })
 }
@@ -217,6 +228,11 @@ exports.blackList = async (req, res) => {
     }
     ngo[0].Status = "Rejected";
     ngo[0].formReason = "Blacklisted";
+    client.messages.create({
+      body: "Your Form request has been blacklisted by the MWCD (Govt. of India). Login to see more details",
+      to: "+91" + ngo[0].phoneNo,
+      from: myNo
+    })
     await ngo[0].save()
     return res.json({ message: "Ngo form blacklisted" })
   })

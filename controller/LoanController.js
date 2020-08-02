@@ -259,7 +259,12 @@ exports.loanReject = async (req, res) => {
         let recieve = req.body.FormReason;
         if (recieve) {
             data[0].FormReason = recieve;
-            await data[0].save()
+            await data[0].save();
+            await client.messages.create({
+                body: "Your loan request has been rejected by the MWCD (Govt. of India). reason for rejection is " + data[0].FormReason,
+                to: "+91" + data[0].phoneNo,
+                from: myNo
+            })
             return res.json({ message: "Loan request Rejected" })
         }
         return res.json({ error: "Please fill complete information" })
@@ -288,7 +293,12 @@ exports.loanApproved = async (req, res) => {
             var yyyy = today.getFullYear();
             today = mm + '/' + dd + '/' + yyyy;
             loan[0].FormReason = "Application approved on " + today;
-            await loan[0].save()
+            await loan[0].save();
+            await client.messages.create({
+                body: "Your loan request has been successfully approved by the MWCD (Govt. of India)",
+                to: "+91" + loan[0].phoneNo,
+                from: myNo
+            })
             return res.json({ message: "Ngo form approved" })
         }
         return res.json({
@@ -338,6 +348,11 @@ exports.loanPaid = async (req, res) => {
                     });
                 }
             })
+            await client.messages.create({
+                body: "Your loan amount has been paid by the MWCD (Govt. of India). Transaction Id and Paid amount is " + TranId + " and " + paidamt,
+                to: "+91" + loan[0].phoneNo,
+                from: myNo
+            })
             await loan[0].save()
             return res.json({ message: "Transaction Process complete" })
         }
@@ -358,6 +373,11 @@ exports.loanRepay = async (req, res) => {
             var payableAmt = req.body.payableAmt;
             if (payableAmt) {
                 loan[0].PayableInstallment = payableAmt;
+                await client.messages.create({
+                    body: "Your request for paying next installment has been approved by the MWCD (Govt. of India)",
+                    to: "+91" + loan[0].phoneNo,
+                    from: myNo
+                })
                 await loan[0].save();
                 res.json({ "message": "Laon Repayment req. accepted" });
             }
@@ -377,6 +397,12 @@ exports.loanRejRepay = async (req, res) => {
             var reason = req.body.RepaymentReason;
             if (reason) {
                 loan[0].RepaymentReason = reason;
+                await client.messages.create({
+                    body: "Your request for paying next installment has been rejected by the MWCD (Govt. of India). Reason for rejection is "
+                        + reason,
+                    to: "+91" + loan[0].phoneNo,
+                    from: myNo
+                })
                 await loan[0].save();
                 res.json({ "message": "Laon Repayment req. rejected" });
             }
@@ -393,6 +419,11 @@ exports.reqRepay = async (req, res) => {
         else {
             loan[0].Repayment = "Requested";
             await loan[0].save();
+            await client.messages.create({
+                body: "Your request for paying next installment has been submited to MWCD (Govt. of India)",
+                to: "+91" + loan[0].phoneNo,
+                from: myNo
+            })
             res.json({ "message": "Laon Repayment req. done" });
         }
     })
