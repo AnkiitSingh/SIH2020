@@ -65,7 +65,7 @@ exports.newNgo = (req, res) => {
         });
       }
       await client.messages.create({
-        body: "Your Form has been successfully submited",
+        body: "Your Form has been successfully submited to MWCD (Govt. of India)",
         to: "+91" + NGO.phoneNo,
         from: myNo
       })
