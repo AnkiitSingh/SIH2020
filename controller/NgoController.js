@@ -61,7 +61,7 @@ exports.newNgo = async (req, res) => {
     newNGO.save(async (err, NGO) => {
       if (err) {
         res.status(400).json({
-          error: "Saving product in DB failed",
+          error: "Saving product in DB failed. check the NgoId, registation no ans email",
         });
       }
       try {

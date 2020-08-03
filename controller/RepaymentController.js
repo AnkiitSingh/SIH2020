@@ -41,6 +41,17 @@ exports.repayAll = async (req, res) => {
     })
 }
 
+exports.repayPending = async (req, res) => {
+    const value = await Repayment.find({ status: "Pending" }, (err, data) => {
+        if (err) {
+            return res.json({
+                message: "No record found"
+            })
+        }
+        return res.send(data)
+    })
+}
+
 exports.filterRepay = async (req, res) => {
     const repay = await Repayment.find({ _id: req.params.id }, function (err, data) {
         if (err) {
